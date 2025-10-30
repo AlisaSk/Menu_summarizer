@@ -1,0 +1,38 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - USE_MOCK=0
+      - DATABASE_PATH=/data/cache.sqlite
+      - UVICORN_HOST=0.0.0.0
+      - PORT=8000
+      - UVICORN_WORKERS=1
+      - APP_MODULE=app.main:app
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Development version with hot reload
+  api-dev:
+    build: .
+    ports:
+      - "8001:8000"
+    environment:
+      - USE_MOCK=1
+      - DATABASE_PATH=/data/cache.sqlite
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+    volumes:
+      - ./app:/app/app
+      - ./data:/data
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    profiles:
+      - dev
