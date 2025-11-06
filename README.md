@@ -169,6 +169,7 @@ For testing you can use:
 - API cost optimization - currently need many tokens for good results (expensive)
 - Metrics and response quality monitoring
 - Webhook notifications for menu changes
+- Use a RAG and/or LangChain-based approach to standardize menu extraction, storing previously parsed menu examples and automatically injecting them into prompts to improve structural consistency. This would reduce LLM calls and make output quality more stable.
 
 ## LLM Integration
 
